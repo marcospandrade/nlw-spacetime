@@ -1,23 +1,12 @@
-import {
-  useFonts,
-  Roboto_400Regular,
-  Roboto_700Bold,
-} from '@expo-google-fonts/roboto'
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native'
-import { BaiJamjuree_700Bold } from '@expo-google-fonts/bai-jamjuree'
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session'
+import { Text, TouchableOpacity, View } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
-import { StatusBar } from 'expo-status-bar'
-import { styled } from 'nativewind'
-import { useEffect } from 'react'
 import { useRouter } from 'expo-router'
+import { useEffect } from 'react'
 
 import NLWLogo from '../src/assets/nlw-spacetime-logo.svg'
-import Stripes from '../src/assets/stripes.svg'
-import blurBg from '../src/assets/bg-blur.png'
-import { api } from '../src/lib/api'
 
-const StyledStripes = styled(Stripes)
+import { api } from '../src/lib/api'
 
 // Endpoint
 const discovery = {
@@ -30,12 +19,6 @@ const discovery = {
 export default function App() {
   const router = useRouter()
 
-  const [fontsLoaded] = useFonts({
-    Roboto_400Regular,
-    Roboto_700Bold,
-    BaiJamjuree_700Bold,
-  })
-
   const [request, response, signInWithGithub] = useAuthRequest(
     {
       clientId: '8b8efc5b55b29ec835ba',
@@ -47,6 +30,7 @@ export default function App() {
     discovery,
   )
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function handleGithubOAuthCode(code: string) {
     const response = await api.post('/register', {
       code,
@@ -71,23 +55,10 @@ export default function App() {
       const { code } = response.params
       handleGithubOAuthCode(code)
     }
-  }, [response])
-
-  if (!fontsLoaded) {
-    return null
-  }
+  }, [handleGithubOAuthCode, response])
 
   return (
-    <ImageBackground
-      source={blurBg}
-      className="relative flex-1 bg-gray-900 px-8 py-10"
-      imageStyle={{
-        position: 'absolute',
-        left: '-110%',
-      }}
-    >
-      <StyledStripes className="absolute left-2" />
-
+    <View className="flex-1 px-8 py-10">
       <View className="flex-1 items-center justify-center gap-6">
         <NLWLogo />
 
@@ -116,8 +87,6 @@ export default function App() {
       <Text className="text-center font-body text-sm leading-relaxed text-gray-200">
         Feito com 💜 no NLW da Rocketseat
       </Text>
-
-      <StatusBar style="light" translucent />
-    </ImageBackground>
+    </View>
   )
 }
