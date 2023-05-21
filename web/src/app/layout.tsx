@@ -31,6 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body
         className={`${roboto.variable} ${baiJamjuree.variable} bg-gray-900 font-sans text-gray-100`}
+        suppressHydrationWarning={true}
       >
         <main className="grid min-h-screen grid-cols-2">
           {/* Left */}
